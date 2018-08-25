@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using DG.Tweening;
-public class UIManager
+public class UIManager : MonoBehaviour
 {
     public Tweener Fn_SetImageAlpha(Image img , float alpha , float time)
     {

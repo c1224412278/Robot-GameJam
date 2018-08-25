@@ -235,13 +235,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\LoadingBars\scripts\scene1.cs" />
+    <Compile Include="Assets\LoadingBars\scripts\scene2.cs" />
+    <Compile Include="Assets\LoadingBars\scripts\scene3.cs" />
     <Compile Include="Assets\Scripts\character\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\NPC\NPCBehaviour.cs" />
-    <Compile Include="Assets\Scripts\NPC\NPCSpots.cs" />
+    <Compile Include="Assets\Scripts\Loading.cs" />
     <Compile Include="Assets\Scripts\System\GameData.cs" />
     <Compile Include="Assets\Scripts\System\GameSystem.cs" />
     <Compile Include="Assets\Scripts\UI\UIExecute.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
+    <Compile Include="Assets\Scripts\UI\UIMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DOTween\DOTween.XML" />
