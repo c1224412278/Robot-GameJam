@@ -11,6 +11,6 @@ public class Loading : MonoBehaviour
     private IEnumerator Fn_LoadSwitchScene(float time)            //等待轉場
     {
         yield return new WaitForSeconds(time);
-        //SceneManager.LoadScene("Scenes/Loading");
+        SceneManager.LoadScene("Scenes/Game_1");
     }
 }

@@ -17,13 +17,20 @@ public class NPCBehaviour : MonoBehaviour {
     public float m_needHpleTime;
     public bool m_needHelpBool;
 
+    /*private bool m_IsExecuteingHelp;        //判斷是否正在幫助人
+    private bool m_helpedComplete;          //判斷是否完成幫助
+    private float m_fHelpingTime;           //幫助別人所需要的時間*/
+
     public Image m_helpImage;
     public Canvas m_DialogCanvas;
+    private Sprite Spr_Help;                //需求 Sprtie
+    private Sprite Spr_Loading;             //Load Sprite
     private Rigidbody2D m_rigidbody;
 
 	void Start () {
 
         m_rigidbody = GetComponent<Rigidbody2D>();
+        Spr_Loading = Resources.Load<Sprite>("Sprite/Load/w1");
 
         m_moveSpeed = Random.Range(0.5f, 1.5f);
         m_moveCount = Random.Range(3, 5);
@@ -32,12 +39,8 @@ public class NPCBehaviour : MonoBehaviour {
 
         StartCoroutine(Move());
         StartCoroutine(NeedHelp());
-	}
+    }
 	
-	void Update () {
-		
-	}
-
     private IEnumerator AddAngryValue()
     {
         while(m_moveCount > 0)
@@ -86,10 +89,13 @@ public class NPCBehaviour : MonoBehaviour {
     {
         while (m_moveCount > 0)
         {
-            while (m_needHelpBool) yield return null;
+            while (m_needHelpBool)
+            {
+                yield return null;
+            }
 
             yield return new WaitForSeconds(m_needHpleTime);
-            EnableHelpImage(null);
+            EnableHelpImage(Spr_Help);
         }
         yield return null;
     }
@@ -102,7 +108,7 @@ public class NPCBehaviour : MonoBehaviour {
 
     private void EnableHelpImage(Sprite request)
     {
-        //m_helpImage.sprite = request;
+        m_helpImage.sprite = request;
         m_DialogCanvas.enabled = true;
         m_needHelpBool = true;
     }
@@ -115,10 +121,44 @@ public class NPCBehaviour : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        /*if (collision.gameObject.name == "Spot")
+        /*if (!m_helpedComplete)          //當需求尚未得到滿足時
         {
-            m_moveComplete = true;
+            if (collision.gameObject.tag == "Player" && m_needHelpBool)
+            {
+                if (!m_IsExecuteingHelp)
+                {
+                    EnableHelpImage(Spr_Loading);
+
+                    m_moveComplete = true;
+                    m_IsExecuteingHelp = true;              //判斷正在幫助 npc
+                    StartCoroutine(Fn_RotationLoad());
+                }
+            }
         }*/
     }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        /*if (!m_helpedComplete)          //當需求尚未得到滿足時
+        {
+            if (collision.gameObject.tag == "Player" && m_needHelpBool)
+            {
+                if (m_IsExecuteingHelp)
+                {
+                    m_IsExecuteingHelp = false;              //判斷取消了幫助 npc
+                }
+                EnableHelpImage(Spr_Help);
+            }
+        }*/
+    }
+    /*private IEnumerator Fn_RotationLoad()           //旋轉 Load 圖示
+    {
+        while (m_IsExecuteingHelp)
+        {
+            m_helpImage.transform.Rotate(Vector3.forward * 75f * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
 
+        //幫助取消了
+        m_helpImage.transform.eulerAngles = Vector3.zero;
+    }*/
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameSystem : MonoBehaviour
 {
     public static GameSystem Instance
@@ -14,6 +14,7 @@ public class GameSystem : MonoBehaviour
     {
         _Instance = this;
         DontDestroyOnLoad(this.gameObject);
+        //SceneManager.LoadScene("Scenes/menu");
     }
     public float Fn_GetInverseLerp(float min , float max , float currect)
     {

@@ -8,18 +8,23 @@ public class UIMenu : MonoBehaviour
 {
     private delegate void _deleg_Event();
     private _deleg_Event deleg_Event;
+    private UIManager UIManagerScript;
 
     [SerializeField] private Text Text_Title;
     [SerializeField] private Text Text_InputAny;
     [SerializeField] private Canvas Canvas_Background;
     [SerializeField] private RectTransform Rect_MenuButtons;
-    [SerializeField] private UIManager UIManagerScript;
     private void Start()
     {
         deleg_Event = Fn_StartGame;
         Text_InputAny.enabled = true;
         Canvas_Background.enabled = false;
         Rect_MenuButtons.gameObject.SetActive(false);
+
+        if (UIManagerScript == null)
+        {
+            UIManagerScript = GameSystem.Instance.gameObject.GetComponent<UIManager>();
+        }
     }
     private void Update()
     {
