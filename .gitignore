@@ -2,8 +2,11 @@
 /.vs
 /obj
 /Temp
+/etc
+/Packages
 /Assembly-CSharp.csproj
 /Assembly-CSharp-Editor.csproj
 /Assembly-CSharp-Editor-firstpass.csproj
 /Assembly-CSharp-firstpass.csproj
-Robot GameJam.sln
+Robot-GameJam.csproj
+Robot-GameJam.sln
