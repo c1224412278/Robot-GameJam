@@ -46,6 +46,11 @@ public class GameSystem : MonoBehaviour
         return false;
     }
 
+    public void Fn_NPCExit()
+    {
+        m_npcCurrentAmoumt -= 1;
+    }
+
     private void Start()
     {
         StartCoroutine(UpdateGameState());

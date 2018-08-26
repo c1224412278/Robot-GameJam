@@ -7,8 +7,8 @@ public enum Enum_NeedServiceKind       //當前需要被服務的總類
 {
     None = -1,         //無
     Drink = 0 ,        //喝
-    Garbage = 1,       //垃圾
-    Sweep = 2,         //掃
+    Sweep = 1,         //掃
+    Garbage = 2,       //垃圾
 }
 public class NPCBehaviour : MonoBehaviour
 {
@@ -49,7 +49,6 @@ public class NPCBehaviour : MonoBehaviour
         Spr_Loading = Resources.Load<Sprite>("Sprite/Load/w1");
 
         m_fMaxHelpingTime = 1.5f;                               //設定最大幫助時間
-        m_moveSpeed = Random.Range(0.5f, 1.5f);
         m_moveCount = Random.Range(3, 5);
         m_waitTimel = Random.Range(5, 10);
         m_needHpleTime = Random.Range(5f, 15f);
@@ -122,7 +121,9 @@ public class NPCBehaviour : MonoBehaviour
 
         while (m_moveCount > 0)
         {
-            SetNextPos();
+            if (m_moveCount <= 1) SetExitPos();
+            else SetNextPos();
+
             while (m_moveComplete == false)
             {
                 while (m_needHelpBool == true)
@@ -146,6 +147,10 @@ public class NPCBehaviour : MonoBehaviour
             yield return new WaitForSeconds(m_waitTimel);
            
         }
+
+        GameSystem.Instance.Fn_NPCExit();
+        Destroy(gameObject);
+
         yield return null;
     }
 
@@ -190,6 +195,12 @@ public class NPCBehaviour : MonoBehaviour
     private void SetNextPos()
     {
         m_target = NPCSpots.Instance.GetRandomSpot();
+        m_moveComplete = false;
+    }
+
+    private void SetExitPos()
+    {
+        m_target = NPCSpots.Instance.GetRandomExitSpot();
         m_moveComplete = false;
     }
 
