@@ -14,7 +14,7 @@ public class NPCBehaviour : MonoBehaviour
 {
     private Enum_NeedServiceKind theNeedServiceKind;
 
-    public Vector3 m_target;
+    public Vector3 m_target ;
     public float m_moveSpeed;
     public int m_moveCount;
     public float m_waitTimel;
