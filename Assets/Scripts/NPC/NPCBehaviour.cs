@@ -43,7 +43,9 @@ public class NPCBehaviour : MonoBehaviour {
 	
     private IEnumerator AddAngryValue()
     {
-        while(m_moveCount > 0)
+        yield return GameSystem.Instance.m_IsGameExecute;
+
+        while (m_moveCount > 0)
         {
             if (m_needHelpBool)
             {
@@ -56,6 +58,8 @@ public class NPCBehaviour : MonoBehaviour {
 
     private IEnumerator Move()
     {
+        yield return GameSystem.Instance.m_IsGameExecute;
+
         while (m_moveCount > 0)
         {
             SetNextPos();
@@ -87,6 +91,8 @@ public class NPCBehaviour : MonoBehaviour {
 
     private IEnumerator NeedHelp()
     {
+        yield return GameSystem.Instance.m_IsGameExecute;
+
         while (m_moveCount > 0)
         {
             while (m_needHelpBool)

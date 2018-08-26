@@ -14,6 +14,7 @@ public static class GameData
         public float m_fMinXRange;          //X軸最小移動範圍
         public float m_fMaxYRange;          //Y軸最大移動範圍
         public float m_fMinYRange;          //Y軸最小移動範圍
+        public Sprite[] Spr_Robots;
     }
 
     [System.Serializable]

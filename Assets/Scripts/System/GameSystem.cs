@@ -10,6 +10,8 @@ public class GameSystem : MonoBehaviour
         set { _Instance = value; }
     }
     private static GameSystem _Instance;
+
+    public bool m_IsGameExecute;
     private void Awake()
     {
         _Instance = this;

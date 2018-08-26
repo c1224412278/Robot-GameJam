@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    enum Enum_RobotKind
+    public enum Enum_RobotKind
     {
         GarbageRobot ,      //垃圾機器人
         SweepRobot ,        //掃地機器人
         DrinkRobot          //販賣機器人
     }
+    public Enum_RobotKind theRobotKind;               //當前機器人的種類
+
     [SerializeField] private UIExecute UIExecuteScript;
     [SerializeField] private Rigidbody2D m_Rigidbody2D;
-    [SerializeField] private Enum_RobotKind theRobotKind;               //當前機器人的種類
     [SerializeField] private GameData.PlayerData thePlayerData;         //玩家資料
     [SerializeField] private GameData.LevelData theLevelData;           //當前關卡資料
     private void Start()
@@ -26,15 +27,21 @@ public class PlayerController : MonoBehaviour
         thePlayerData.m_fSchedule = thePlayerData.m_fMaxSchedule;
         theLevelData.m_fLastTime = theLevelData.m_fMaxExecuteTime;
 
-        theRobotKind = Enum_RobotKind.DrinkRobot;
+        StartCoroutine(Fn_GetCharacterSkin());
     }
     private void Update()
     {
-        Fn_GetLastTime(1f);
+        if (GameSystem.Instance.m_IsGameExecute)
+        {
+            Fn_GetLastTime(1f);
+        }
     }
     private void LateUpdate()
     {
-        Fn_Moveing();
+        if (GameSystem.Instance.m_IsGameExecute)
+        {
+            Fn_Moveing();
+        }
     }
     private void Fn_Moveing()
     {
@@ -58,6 +65,30 @@ public class PlayerController : MonoBehaviour
         {
             theLevelData.m_fLastTime -= speed * Time.deltaTime;
             UIExecuteScript.Img_CurrectTime.fillAmount = GameSystem.Instance.Fn_GetInverseLerp(0, theLevelData.m_fMaxExecuteTime, theLevelData.m_fLastTime);
+        }
+    }
+    private IEnumerator Fn_GetCharacterSkin()
+    {
+        yield return GameSystem.Instance.m_IsGameExecute;
+
+        while (this.gameObject.activeInHierarchy)
+        {
+            #region update skin
+            if (theRobotKind == Enum_RobotKind.DrinkRobot)
+            {
+                this.GetComponent<SpriteRenderer>().sprite = thePlayerData.Spr_Robots[2];
+            }
+            else if (theRobotKind == Enum_RobotKind.GarbageRobot)
+            {
+                this.GetComponent<SpriteRenderer>().sprite = thePlayerData.Spr_Robots[1];
+            }
+            else if (theRobotKind == Enum_RobotKind.SweepRobot)
+            {
+                this.GetComponent<SpriteRenderer>().sprite = thePlayerData.Spr_Robots[0];
+            }
+            #endregion
+
+            yield return new WaitForEndOfFrame();
         }
     }
 }
