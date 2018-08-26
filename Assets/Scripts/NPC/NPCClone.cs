@@ -23,7 +23,10 @@ public class NPCClone : MonoBehaviour {
 
             if (GameSystem.Instance.Fn_CanAddNewNPC())
             {
+                int RandomType = Random.Range(0, m_type.Length);
                 GameObject npc = Instantiate(m_NPCobj, NPCSpots.Instance.GetRandomExitSpot(), Quaternion.identity);
+                npc.transform.GetChild(0).localScale = Vector3.one * m_type[RandomType].scale;
+                npc.GetComponent<NPCBehaviour>().m_moveSpeed = m_type[RandomType].speed;
             }  
         }
     }
