@@ -13,7 +13,7 @@ public class SceneScript : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(12f);
             Instantiate(m_ObjWater , new Vector3(Random.Range(-5f , 5f) , Random.Range(-3f , 3f) , 0f) , Quaternion.identity);
         }
     }

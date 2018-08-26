@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
         thePlayerData.m_fSchedule = thePlayerData.m_fMaxSchedule;
         theLevelData.m_fFriendValue = theLevelData.m_fMaxFriendValue;
 
+        AudioManager.Instance.Fn_PlayBgm(AudioManager.Instance.theAudioData.Clip_GameBgm);
         StartCoroutine(Fn_SetHelpValue());
     }
     private void LateUpdate()

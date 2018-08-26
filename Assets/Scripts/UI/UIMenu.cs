@@ -16,6 +16,8 @@ public class UIMenu : MonoBehaviour
     [SerializeField] private RectTransform Rect_MenuButtons;
     private void Start()
     {
+        AudioManager.Instance.Fn_PlayBgm(AudioManager.Instance.theAudioData.Clip_MenuBgm);
+
         deleg_Event = Fn_StartGame;
         Text_InputAny.enabled = true;
         Canvas_Background.enabled = false;
@@ -65,6 +67,7 @@ public class UIMenu : MonoBehaviour
             {
                 Debug.Log("Switch Scene.");
                 SceneManager.LoadScene("Scenes/Loading");
+                AudioManager.Instance.Fn_StopBgm();
             });
     }
     public void Fn_ExitGame()

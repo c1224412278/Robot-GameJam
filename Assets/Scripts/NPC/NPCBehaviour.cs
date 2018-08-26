@@ -77,8 +77,15 @@ public class NPCBehaviour : MonoBehaviour
             {
                 //Debug.Log("幫助失敗 .. !!");
                 PlayerControllerScript.theLevelData.m_fFriendValue -= 1;
+                if (PlayerControllerScript.theLevelData.m_fFriendValue <= 0)
+                {
+                    GameSystem.Instance.m_evaluationValue = 0;
+                    //AudioManager.Instance.Fn_PlayAudioEffect(AudioManager.Instance.theAudioData.Clip_Hurt);
+                }
+                else
+                    AudioManager.Instance.Fn_PlayAudioEffect(AudioManager.Instance.theAudioData.Clip_Hurt);
+
                 DisableHelpImage();
-                AudioManager.Instance.Fn_PlayAudioEffect(AudioManager.Instance.theAudioData.Clip_Hurt);
             }
         }
 

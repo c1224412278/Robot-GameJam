@@ -29,7 +29,7 @@ public class GameSystem : MonoBehaviour
     {
         _Instance = this;
         DontDestroyOnLoad(this.gameObject);
-        //SceneManager.LoadScene("Scenes/menu");
+        SceneManager.LoadScene("Scenes/menu");
     }
     public float Fn_GetInverseLerp(float min , float max , float currect)
     {
@@ -73,6 +73,12 @@ public class GameSystem : MonoBehaviour
                 m_npcMoveCount = 1 + (m_LV / 3);    // 每升級三次關卡就增加NPC移動地點的次數
 
         }
+
+        UIExecute.Instance.EnableGameOverCanvas();
+        AudioManager.Instance.Fn_StopBgm();
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("Scenes/menu");
+        m_IsGameExecute = true;
     }
 
     private IEnumerator CheckEvaluation()

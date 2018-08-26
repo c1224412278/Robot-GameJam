@@ -41,5 +41,7 @@ public static class GameData
         public AudioClip Clip_Hurt;
         public AudioClip Clip_UISwitch;
         public AudioClip Clip_CompletedHelp;
+        public AudioClip Clip_MenuBgm;
+        public AudioClip Clip_GameBgm;
     }
 }
