@@ -33,6 +33,8 @@ public class skinManager : MonoBehaviour
             PlayerScript.gameObject.GetComponent<SpriteRenderer>().sprite = PlayerScript.Fn_ReturnPlayerControllerData().Spr_Robots[2];
             PlayerScript.theRobotKind = PlayerController.Enum_RobotKind.DrinkRobot;
             //變為販賣機器人
+
+            AudioManager.Instance.Fn_PlayAudioEffect(AudioManager.Instance.theAudioData.Clip_UISwitch);
         }
     }
     public void Fn_UpdateToGarbageRobot()
@@ -42,6 +44,8 @@ public class skinManager : MonoBehaviour
             PlayerScript.gameObject.GetComponent<SpriteRenderer>().sprite = PlayerScript.Fn_ReturnPlayerControllerData().Spr_Robots[1];
             PlayerScript.theRobotKind = PlayerController.Enum_RobotKind.GarbageRobot;
             //變為垃圾機器人
+
+            AudioManager.Instance.Fn_PlayAudioEffect(AudioManager.Instance.theAudioData.Clip_UISwitch);
         }
     }
     public void Fn_UpdateToSweepRobot()
@@ -51,6 +55,8 @@ public class skinManager : MonoBehaviour
             PlayerScript.gameObject.GetComponent<SpriteRenderer>().sprite = PlayerScript.Fn_ReturnPlayerControllerData().Spr_Robots[0];
             PlayerScript.theRobotKind = PlayerController.Enum_RobotKind.SweepRobot;
             //變為掃地機器人
+
+            AudioManager.Instance.Fn_PlayAudioEffect(AudioManager.Instance.theAudioData.Clip_UISwitch);
         }
     }
 }

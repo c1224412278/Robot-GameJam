@@ -33,4 +33,13 @@ public static class GameData
             return Spr_HelpKinds[number];
         }
     }
+
+    [System.Serializable]
+    public class AudioData
+    {
+        public AudioClip Clip_UIClick;
+        public AudioClip Clip_Hurt;
+        public AudioClip Clip_UISwitch;
+        public AudioClip Clip_CompletedHelp;
+    }
 }

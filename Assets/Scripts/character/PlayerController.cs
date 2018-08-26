@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
         while (!m_AllowMove)
         {
             Debug.Log("slip move.");
-            m_Rigidbody2D.velocity = MovePosition * 3.5f;
+            m_Rigidbody2D.velocity = MovePosition * 1f;
             yield return new WaitForEndOfFrame();
         }
     }

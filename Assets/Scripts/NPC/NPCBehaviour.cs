@@ -76,9 +76,10 @@ public class NPCBehaviour : MonoBehaviour
             m_fLoadTime -= Time.deltaTime;
             if (m_fLoadTime <= 0f)
             {
-                Debug.Log("幫助失敗 .. !!");
+                //Debug.Log("幫助失敗 .. !!");
                 PlayerControllerScript.theLevelData.m_fFriendValue -= 1;
                 DisableHelpImage();
+                AudioManager.Instance.Fn_PlayAudioEffect(AudioManager.Instance.theAudioData.Clip_Hurt);
             }
         }
 
@@ -95,6 +96,7 @@ public class NPCBehaviour : MonoBehaviour
 
                 m_IsExecuteingHelp = false;
                 m_helpedComplete = false;                            //幫助完成
+                AudioManager.Instance.Fn_PlayAudioEffect(AudioManager.Instance.theAudioData.Clip_CompletedHelp);
             }
         }
     }
