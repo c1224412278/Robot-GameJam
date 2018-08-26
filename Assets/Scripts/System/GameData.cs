@@ -20,7 +20,17 @@ public static class GameData
     [System.Serializable]
     public class LevelData
     {
-        [HideInInspector] public float m_fLastTime;           //遊戲剩餘時間
-        public float m_fMaxExecuteTime;     //最大遊玩時間
+        [HideInInspector] public float m_fFriendValue;           //當前剩餘好友度
+        public float m_fMaxFriendValue;     //最大好友度
+    }
+
+    [System.Serializable]
+    public class NpcData
+    {
+        public Sprite[] Spr_HelpKinds;
+        public Sprite Fn_GetHelpLogo(int number)      //取得當前需要幫助的圖示
+        {
+            return Spr_HelpKinds[number];
+        }
     }
 }

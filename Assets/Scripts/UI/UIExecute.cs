@@ -14,7 +14,7 @@ public class UIExecute : MonoBehaviour
     private static UIExecute _Instance;
     #endregion
 
-    public Image Img_CurrectTime;
+    public Image Img_CurrectFriend;
     private void Awake()
     {
         _Instance = this;

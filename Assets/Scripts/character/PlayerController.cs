@@ -6,39 +6,41 @@ public class PlayerController : MonoBehaviour
 {
     public enum Enum_RobotKind
     {
-        GarbageRobot ,      //垃圾機器人
-        SweepRobot ,        //掃地機器人
-        DrinkRobot          //販賣機器人
+        DrinkRobot = 0 ,       //販賣機器人
+        GarbageRobot = 1,      //垃圾機器人
+        SweepRobot = 2,        //掃地機器人
+        
     }
-    public Enum_RobotKind theRobotKind;               //當前機器人的種類
 
-    [SerializeField] private UIExecute UIExecuteScript;
+    public bool m_IsAllowMove
+    {
+        get { return m_AllowMove; }
+        set { m_AllowMove = value; }
+    }
+    private bool m_AllowMove;
+
+    public Enum_RobotKind theRobotKind;               //當前機器人的種類
+    public GameData.LevelData theLevelData;           //當前關卡資料
+
     [SerializeField] private Rigidbody2D m_Rigidbody2D;
     [SerializeField] private GameData.PlayerData thePlayerData;         //玩家資料
-    [SerializeField] private GameData.LevelData theLevelData;           //當前關卡資料
     private void Start()
     {
-        if (thePlayerData == null || m_Rigidbody2D == null || UIExecuteScript == null)
+        if (thePlayerData == null || m_Rigidbody2D == null)
         {
             Debug.Log("find error.");
             return;
         }
 
+        m_AllowMove = true;                       //允許玩家移動
         thePlayerData.m_fSchedule = thePlayerData.m_fMaxSchedule;
-        theLevelData.m_fLastTime = theLevelData.m_fMaxExecuteTime;
+        theLevelData.m_fFriendValue = theLevelData.m_fMaxFriendValue;
 
-        StartCoroutine(Fn_GetCharacterSkin());
-    }
-    private void Update()
-    {
-        if (GameSystem.Instance.m_IsGameExecute)
-        {
-            Fn_GetLastTime(1f);
-        }
+        StartCoroutine(Fn_SetHelpValue());
     }
     private void LateUpdate()
     {
-        if (GameSystem.Instance.m_IsGameExecute)
+        if (GameSystem.Instance.m_IsGameExecute && m_AllowMove)
         {
             Fn_Moveing();
         }
@@ -59,36 +61,23 @@ public class PlayerController : MonoBehaviour
             m_Rigidbody2D.velocity = Vector3.zero;
         }
     }
-    private void Fn_GetLastTime(float speed)
+    private IEnumerator Fn_SetHelpValue()
     {
-        if (theLevelData.m_fLastTime > 0f)
+        while (true)
         {
-            theLevelData.m_fLastTime -= speed * Time.deltaTime;
-            UIExecuteScript.Img_CurrectTime.fillAmount = GameSystem.Instance.Fn_GetInverseLerp(0, theLevelData.m_fMaxExecuteTime, theLevelData.m_fLastTime);
-        }
-    }
-    private IEnumerator Fn_GetCharacterSkin()
-    {
-        yield return GameSystem.Instance.m_IsGameExecute;
-
-        while (this.gameObject.activeInHierarchy)
-        {
-            #region update skin
-            if (theRobotKind == Enum_RobotKind.DrinkRobot)
-            {
-                this.GetComponent<SpriteRenderer>().sprite = thePlayerData.Spr_Robots[2];
-            }
-            else if (theRobotKind == Enum_RobotKind.GarbageRobot)
-            {
-                this.GetComponent<SpriteRenderer>().sprite = thePlayerData.Spr_Robots[1];
-            }
-            else if (theRobotKind == Enum_RobotKind.SweepRobot)
-            {
-                this.GetComponent<SpriteRenderer>().sprite = thePlayerData.Spr_Robots[0];
-            }
-            #endregion
-
+            UIExecute.Instance.Img_CurrectFriend.fillAmount = GameSystem.Instance.Fn_GetInverseLerp(0, theLevelData.m_fMaxFriendValue, theLevelData.m_fFriendValue);
             yield return new WaitForEndOfFrame();
         }
+    }
+    public void Fn_SetStopMoveing()             //停止移動
+    {
+        m_Rigidbody2D.velocity = Vector3.zero;
+    }
+
+
+    // return 
+    public GameData.PlayerData Fn_ReturnPlayerControllerData()
+    {
+        return thePlayerData;
     }
 }

@@ -3,7 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NPCBehaviour : MonoBehaviour {
+public enum Enum_NeedServiceKind       //當前需要被服務的總類
+{
+    None = -1,         //無
+    Drink = 0 ,        //喝
+    Garbage = 1,       //垃圾
+    Sweep = 2,         //掃
+}
+public class NPCBehaviour : MonoBehaviour
+{
+    private Enum_NeedServiceKind theNeedServiceKind;
 
     public Vector3 m_target;
     public float m_moveSpeed;
@@ -17,30 +26,79 @@ public class NPCBehaviour : MonoBehaviour {
     public float m_needHpleTime;
     public bool m_needHelpBool;
 
-    /*private bool m_IsExecuteingHelp;        //判斷是否正在幫助人
+    private float m_fLoadTime;              //等待幫助的時間
+    
+    private float m_fHelpingTime;           //幫助別人所需要的時間
+    private float m_fMaxHelpingTime;        //幫助最大等待時間
+
     private bool m_helpedComplete;          //判斷是否完成幫助
-    private float m_fHelpingTime;           //幫助別人所需要的時間*/
+    private bool m_IsExecuteingHelp;        //判斷是否正在幫助人
 
     public Image m_helpImage;
     public Canvas m_DialogCanvas;
+
     private Sprite Spr_Help;                //需求 Sprtie
     private Sprite Spr_Loading;             //Load Sprite
     private Rigidbody2D m_rigidbody;
 
-	void Start () {
-
+    private PlayerController PlayerControllerScript;
+    [SerializeField] private GameData.NpcData theNpcData;
+	void Start ()
+    {
         m_rigidbody = GetComponent<Rigidbody2D>();
         Spr_Loading = Resources.Load<Sprite>("Sprite/Load/w1");
 
+        m_fMaxHelpingTime = 1.5f;                               //設定最大幫助時間
         m_moveSpeed = Random.Range(0.5f, 1.5f);
         m_moveCount = Random.Range(3, 5);
         m_waitTimel = Random.Range(5, 10);
         m_needHpleTime = Random.Range(5f, 15f);
 
+        theNeedServiceKind = Enum_NeedServiceKind.None;         //當前沒有需要被服務的需求
+
+        PlayerControllerScript = FindObjectOfType<PlayerController>();          //抓取角色控制腳本
+
         StartCoroutine(Move());
         StartCoroutine(NeedHelp());
     }
-	
+    private void Update()
+    {
+        if ((int)theNeedServiceKind == (int)PlayerControllerScript.theRobotKind)
+        {
+            this.GetComponent<Collider2D>().enabled = true;          //開啟碰撞器
+        }
+        else
+            this.GetComponent<Collider2D>().enabled = false;         //關閉碰撞器
+
+
+        if (m_needHelpBool && !m_IsExecuteingHelp)                   //正在等待玩家幫助中
+        {
+            m_fLoadTime -= Time.deltaTime;
+            if (m_fLoadTime <= 0f)
+            {
+                Debug.Log("幫助失敗 .. !!");
+                PlayerControllerScript.theLevelData.m_fFriendValue -= 1;
+                DisableHelpImage();
+            }
+        }
+
+
+        if (m_IsExecuteingHelp)
+        {
+            if (m_fHelpingTime > 0)
+            {
+                m_fHelpingTime -= Time.deltaTime;
+            }
+            else
+            {
+                DisableHelpImage();
+
+                m_IsExecuteingHelp = false;
+                m_helpedComplete = false;                            //幫助完成
+            }
+        }
+    }
+
     private IEnumerator AddAngryValue()
     {
         yield return GameSystem.Instance.m_IsGameExecute;
@@ -97,11 +155,32 @@ public class NPCBehaviour : MonoBehaviour {
         {
             while (m_needHelpBool)
             {
+                //顯示圖示後，協程暫停
                 yield return null;
             }
 
             yield return new WaitForSeconds(m_needHpleTime);
-            EnableHelpImage(Spr_Help);
+
+            int number = Random.Range(0 , theNpcData.Spr_HelpKinds.Length);
+            Spr_Help = theNpcData.Fn_GetHelpLogo(number);            //取得幫助的圖示
+            if (number == 0)
+            {
+                theNeedServiceKind = Enum_NeedServiceKind.Drink;
+            }
+            else if (number == 1)
+            {
+                theNeedServiceKind = Enum_NeedServiceKind.Garbage;
+            }
+            else if (number == 2)
+            {
+                theNeedServiceKind = Enum_NeedServiceKind.Sweep;
+            }
+
+
+            if (Spr_Help != null)               //當要顯示的需求圖示不等於 null 時
+            {
+                EnableHelpImage(Spr_Help);
+            }
         }
         yield return null;
     }
@@ -116,6 +195,7 @@ public class NPCBehaviour : MonoBehaviour {
     {
         m_helpImage.sprite = request;
         m_DialogCanvas.enabled = true;
+        m_fLoadTime = 3f;
         m_needHelpBool = true;
     }
 
@@ -127,36 +207,40 @@ public class NPCBehaviour : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        /*if (!m_helpedComplete)          //當需求尚未得到滿足時
+        if (!m_helpedComplete)          //當需求尚未得到滿足時
         {
             if (collision.gameObject.tag == "Player" && m_needHelpBool)
             {
                 if (!m_IsExecuteingHelp)
                 {
-                    EnableHelpImage(Spr_Loading);
+                    m_helpImage.sprite = Spr_Loading;
+                    m_DialogCanvas.enabled = true;
 
                     m_moveComplete = true;
+
+                    m_fHelpingTime = m_fMaxHelpingTime;     //給予幫助所需等待時間
                     m_IsExecuteingHelp = true;              //判斷正在幫助 npc
-                    StartCoroutine(Fn_RotationLoad());
+
+                    StartCoroutine(Fn_RotationLoad());      //Loading Sprite Rotation
                 }
             }
-        }*/
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        /*if (!m_helpedComplete)          //當需求尚未得到滿足時
+        if (m_IsExecuteingHelp)          //當角色正在幫助別人時，離開
         {
-            if (collision.gameObject.tag == "Player" && m_needHelpBool)
+            if (collision.gameObject.tag == "Player")
             {
                 if (m_IsExecuteingHelp)
                 {
+                    DisableHelpImage();
                     m_IsExecuteingHelp = false;              //判斷取消了幫助 npc
                 }
-                EnableHelpImage(Spr_Help);
             }
-        }*/
+        }
     }
-    /*private IEnumerator Fn_RotationLoad()           //旋轉 Load 圖示
+    private IEnumerator Fn_RotationLoad()           //旋轉 Load 圖示
     {
         while (m_IsExecuteingHelp)
         {
@@ -166,5 +250,5 @@ public class NPCBehaviour : MonoBehaviour {
 
         //幫助取消了
         m_helpImage.transform.eulerAngles = Vector3.zero;
-    }*/
+    }
 }

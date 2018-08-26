@@ -244,6 +244,7 @@
     <Compile Include="Assets\Scripts\NPC\NPCBehaviour.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCClone.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCSpots.cs" />
+    <Compile Include="Assets\Scripts\Scene\water_floor.cs" />
     <Compile Include="Assets\Scripts\System\GameData.cs" />
     <Compile Include="Assets\Scripts\System\GameSystem.cs" />
     <Compile Include="Assets\Scripts\UI\UIExecute.cs" />
