@@ -69,9 +69,15 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
-    public void Fn_SetStopMoveing()             //停止移動
+    public IEnumerator Fn_SetSlipMoveing()             //滑倒移動
     {
-        m_Rigidbody2D.velocity = Vector3.zero;
+        Vector2 MovePosition = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        while (!m_AllowMove)
+        {
+            Debug.Log("slip move.");
+            m_Rigidbody2D.velocity = MovePosition * 3.5f;
+            yield return new WaitForEndOfFrame();
+        }
     }
 
 
