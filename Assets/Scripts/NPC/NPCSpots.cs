@@ -29,7 +29,7 @@ public class NPCSpots : MonoBehaviour {
 
     public Vector2 GetRandomExitSpot()
     {
-        return m_exitSpots[Random.Range(0, m_spots.Length)].transform.position;
+        return m_exitSpots[Random.Range(0, m_exitSpots.Length)].transform.position;
     }
 
 }
