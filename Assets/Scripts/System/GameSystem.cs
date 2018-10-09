@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class GameSystem : MonoBehaviour
 {
     public static GameSystem Instance
@@ -12,6 +13,7 @@ public class GameSystem : MonoBehaviour
     private static GameSystem _Instance;
 
     public bool m_IsGameExecute;
+    public int m_MaxLV = 5;                     // 關卡最大等級
     public int m_LV = 1;                        // 關卡
     public float m_UpdateLVTime = 5;            // 升級關卡時間   
 
@@ -25,11 +27,14 @@ public class GameSystem : MonoBehaviour
 
     public float m_evaluationValue = 100;       // 評價值
 
+    [SerializeField]
+    private PassInt OnNextLevel;
+
     private void Awake()
     {
         _Instance = this;
         DontDestroyOnLoad(this.gameObject);
-        SceneManager.LoadScene("Scenes/menu");
+        //SceneManager.LoadScene("Scenes/menu");
     }
     public float Fn_GetInverseLerp(float min , float max , float currect)
     {
@@ -49,6 +54,11 @@ public class GameSystem : MonoBehaviour
     public void Fn_NPCExit()
     {
         m_npcCurrentAmoumt -= 1;
+    }
+
+    public void Fn_NextLevelEvent(int level)
+    {
+        OnNextLevel.Invoke(level);
     }
 
     private void Start()

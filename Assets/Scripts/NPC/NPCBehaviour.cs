@@ -231,6 +231,7 @@ public class NPCBehaviour : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player" && m_needHelpBool)
             {
+                Debug.Log("Enter Player");
                 if (!m_IsExecuteingHelp)
                 {
                     m_helpImage.sprite = Spr_Loading;
@@ -252,6 +253,7 @@ public class NPCBehaviour : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player")
             {
+                Debug.Log("Exit Player");
                 if (m_IsExecuteingHelp)
                 {
                     DisableHelpImage();
