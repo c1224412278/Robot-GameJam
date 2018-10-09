@@ -4,6 +4,5 @@
 /Temp
 /etc
 /Packages
-/Output
 *.csproj
 *.sln
